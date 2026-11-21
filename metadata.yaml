@@ -1,0 +1,19 @@
+name: astrbot_plugin_voice_reply
+display_name: 语音接管
+short_desc: 关键词触发的整条语音回复，绕开内置 TTS 的概率与分段
+desc: >-
+  接管 LLM 回复的语音发送：命中关键词或回复内标签时，把整条回复一次合成为一条语音直接发出，
+  不经过 AstrBot 内置 TTS（无概率、不受分段回复影响）；超长回复自动退回文字。
+  音色通过 MiMo TTS 的克隆音色（参考音频）或预置音色合成。
+version: 1.7.1
+author: AcceleratorYue
+repo: https://github.com/AcceleratorYue/astrbot_plugin_voice_reply
+social_link: https://github.com/AcceleratorYue
+astrbot_version: ">=4.29.1,<5"
+support_platforms:
+  - aiocqhttp
+tags:
+  - 语音
+  - TTS
+  - MiMo
+  - 关键词

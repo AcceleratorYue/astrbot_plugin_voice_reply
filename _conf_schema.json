@@ -1,0 +1,318 @@
+{
+  "enabled": {
+    "description": "启用语音接管",
+    "type": "bool",
+    "default": true,
+    "hint": "关闭后插件完全不干预消息"
+  },
+  "trigger_mode": {
+    "description": "触发方式",
+    "type": "string",
+    "default": "keyword",
+    "options": [
+      "keyword",
+      "always"
+    ],
+    "hint": "keyword=命中关键词才发语音；always=所有 LLM 回复都发语音"
+  },
+  "trigger_on": {
+    "description": "触发来源",
+    "type": "string",
+    "default": "both",
+    "options": [
+      "user",
+      "reply",
+      "both"
+    ],
+    "hint": "user=用户消息含触发词；reply=模型回复含标签；both=两者任一"
+  },
+  "user_keywords": {
+    "description": "用户消息触发词",
+    "type": "list",
+    "items": {
+      "type": "string"
+    },
+    "default": [
+      "语音"
+    ],
+    "hint": "用户消息包含任一关键词时，把这次回复发成语音"
+  },
+  "reply_tags": {
+    "description": "回复内触发标签",
+    "type": "list",
+    "items": {
+      "type": "string"
+    },
+    "default": [
+      "（语音）",
+      "[语音]",
+      "【语音】"
+    ],
+    "hint": "模型回复里出现这些标签时发语音；标签本身不会被念出来，也不会发给用户"
+  },
+  "max_chars": {
+    "description": "语音最长字数",
+    "type": "int",
+    "default": 200,
+    "hint": "清洗后超过这个长度就只发文字（200 字约 45 秒语音，避免 QQ 语音过长）"
+  },
+  "min_chars": {
+    "description": "语音最短字数",
+    "type": "int",
+    "default": 2,
+    "hint": "太短的回复（如单个表情）不合成"
+  },
+  "voice_mode": {
+    "description": "音色模式",
+    "type": "string",
+    "default": "clone",
+    "options": [
+      "clone",
+      "voicedesign",
+      "preset"
+    ],
+    "hint": "clone=参考音频克隆；voicedesign=文字描述设计音色；preset=MiMo 预置音色"
+  },
+  "voice_description": {
+    "description": "音色描述（voicedesign 用）",
+    "type": "text",
+    "default": "少女音，清亮甜美，略带撒娇，语速偏快，语气活泼",
+    "hint": "voicedesign 模式必填：用文字描述音色；clone 模式下作为可选的风格指令"
+  },
+  "fallback_mode": {
+    "description": "克隆被限流时的兜底音色",
+    "type": "string",
+    "default": "none",
+    "options": [
+      "none",
+      "voicedesign",
+      "preset"
+    ],
+    "hint": "克隆模型返回 429 时自动改用该模式合成；none=退回文字"
+  },
+  "reference_audio": {
+    "description": "克隆参考音频路径",
+    "type": "string",
+    "default": "",
+    "hint": "wav/mp3，建议 5~15 秒单人干声，不超过 10MB；请填写本机可访问的绝对路径"
+  },
+  "preset_voice": {
+    "description": "预置音色",
+    "type": "string",
+    "default": "冰糖",
+    "options": [
+      "mimo_default",
+      "冰糖",
+      "茉莉",
+      "苏打",
+      "白桦",
+      "Mia",
+      "Chloe",
+      "Milo",
+      "Dean"
+    ]
+  },
+  "style_prompt": {
+    "description": "风格指令",
+    "type": "text",
+    "default": "",
+    "hint": "会作为 user 消息发给模型，例如：可爱一点，语速稍快"
+  },
+  "stt_enabled": {
+    "description": "语音转文字（ASR）",
+    "type": "bool",
+    "default": true,
+    "hint": "收到语音消息时用 MiMo-V2.5-ASR 转成文字再交给模型；按音频时长计费（¥0.5/小时）"
+  },
+  "stt_model": {
+    "description": "语音识别模型",
+    "type": "string",
+    "default": "mimo-v2.5-asr"
+  },
+  "stt_language": {
+    "description": "识别语种",
+    "type": "string",
+    "default": "auto",
+    "options": [
+      "auto",
+      "zh",
+      "en"
+    ]
+  },
+  "stt_message_prefix": {
+    "description": "转写文本前缀",
+    "type": "string",
+    "default": "",
+    "hint": "留空则直接用转写文本；填「（语音）」可让模型知道这是语音输入"
+  },
+  "api_key": {
+    "description": "MiMo API Key",
+    "type": "string",
+    "default": "",
+    "obvious_hint": true
+  },
+  "api_base": {
+    "description": "MiMo API 地址",
+    "type": "string",
+    "default": "https://api.xiaomimimo.com/v1"
+  },
+  "proxy": {
+    "description": "代理",
+    "type": "string",
+    "default": "",
+    "hint": "留空=直连（国内可直连）。形如 http://127.0.0.1:7890"
+  },
+  "timeout": {
+    "description": "合成超时（秒）",
+    "type": "int",
+    "default": 60
+  },
+  "retry": {
+    "description": "失败重试次数",
+    "type": "int",
+    "default": 1,
+    "hint": "仅对 429 / 5xx / 超时重试"
+  },
+  "concurrency": {
+    "description": "并发合成上限",
+    "type": "int",
+    "default": 2
+  },
+  "cache_enabled": {
+    "description": "缓存相同文本的语音",
+    "type": "bool",
+    "default": true
+  },
+  "cache_max_files": {
+    "description": "缓存文件上限",
+    "type": "int",
+    "default": 200
+  },
+  "strip_emoji": {
+    "description": "念之前去掉表情符号",
+    "type": "bool",
+    "default": true
+  },
+  "whitelist": {
+    "description": "只在这些会话生效",
+    "type": "list",
+    "items": {
+      "type": "string"
+    },
+    "default": [],
+    "hint": "填 unified_msg_origin 或其中一部分（如群号）；留空=全部会话"
+  },
+  "blacklist": {
+    "description": "这些会话不生效",
+    "type": "list",
+    "items": {
+      "type": "string"
+    },
+    "default": []
+  },
+  "clone_model": {
+    "description": "克隆模型",
+    "type": "string",
+    "default": "mimo-v2.5-tts-voiceclone"
+  },
+  "preset_model": {
+    "description": "预置音色模型",
+    "type": "string",
+    "default": "mimo-v2.5-tts"
+  },
+  "inject_capability_prompt": {
+    "description": "让模型知道自己能发语音",
+    "type": "bool",
+    "default": true,
+    "hint": "每轮 LLM 请求向系统提示词追加一段能力说明（不写入对话历史），避免角色以为\"只能打字\""
+  },
+  "capability_prompt": {
+    "description": "能力说明文本",
+    "type": "text",
+    "default": "【能力说明｜系统自动注入，不必向用户逐字复述】\n你可以发送语音。当用户消息里出现「语音」二字，或你在回复最前面写上「（语音）」时，系统会把这一整条回复合成成语音发出去（使用系统设定的音色）。「（语音）」这个标记会被自动去掉，不会出现在用户看到的文字里。\n注意：对话记录里你只看得到自己的文字，看不到语音本身，这不代表你不能发语音。如果被问到\"能不能发语音/为什么只打字\"，请如实说明可以发语音，并提示对方在消息里带上「语音」。\n语音有长度上限，过长时系统会自动只发文字；不要编造音频链接或文件。",
+    "hint": "可自行改写，例如加入\"想撒娇时可以主动在回复开头加（语音）\""
+  },
+  "acting_enabled": {
+    "description": "语音演技标记",
+    "type": "bool",
+    "default": true,
+    "hint": "允许模型用 [style:...] / [sfx:...] 自主控制语气与语气音，插件翻译成 MiMo 原生标签"
+  },
+  "inject_acting_prompt": {
+    "description": "注入演技说明",
+    "type": "bool",
+    "default": true,
+    "hint": "向系统提示词追加标记用法和可用词表"
+  },
+  "acting_prompt": {
+    "description": "演技说明文本",
+    "type": "text",
+    "default": "【语音演技｜系统注入，标记不会显示给用户也不会被念出来】\n你可以在回复里控制自己的语气：\n- 开头写 [style:温柔] 或组合 [style:慵懒 俏皮] 指定风格。可用：{styles}\n- 句中写 [sfx:轻笑]、[sfx:叹气]、[sfx:停顿] 等插入语气音。可用：{sfx}\n- 只在需要表演时使用，最多 1 个风格 + 1~2 个语气音；没有需要就不要加。\n- 不要用普通括号写动作或内心独白：普通括号里的内容会被当成台词念出来。",
+    "hint": "支持占位符 {styles}（风格词表）和 {sfx}（语气音词表）"
+  },
+  "acting_style_list": {
+    "description": "允许的风格词",
+    "type": "list",
+    "items": {
+      "type": "string"
+    },
+    "default": [],
+    "hint": "留空使用 MiMo 文档推荐词表；填了则只放行列出的词"
+  },
+  "acting_sfx_list": {
+    "description": "允许的语气音",
+    "type": "list",
+    "items": {
+      "type": "string"
+    },
+    "default": [],
+    "hint": "留空使用 MiMo 文档推荐词表；填了则只放行列出的词"
+  },
+  "proactive_voice_enabled": {
+    "description": "接管定时任务/主动消息的语音",
+    "type": "bool",
+    "default": true,
+    "hint": "AstrBot 定时任务和 send_message_to_user 不走发送前钩子；开启后插件会拦截带触发标签的主动纯文本消息并改发语音"
+  },
+  "proactive_always_voice": {
+    "description": "主动消息一律发语音",
+    "type": "bool",
+    "default": false,
+    "hint": "不开时只转换带「（语音）」等触发标签的主动消息；开启后所有主动纯文本消息都转语音"
+  },
+  "cron_fallback_enabled": {
+    "description": "定时任务未发送时兜底补发",
+    "type": "bool",
+    "default": true,
+    "hint": "AstrBot 定时任务依赖模型调用 send_message_to_user；若模型只写最终回复，消息会丢。开启后插件会在 agent 结束且未发送时补发（带「（语音）」则转语音）"
+  },
+  "cron_tool_prompt": {
+    "description": "定时任务强制调用发送工具",
+    "type": "bool",
+    "default": true,
+    "hint": "给 cron agent 注入说明：必须用 send_message_to_user 发送，否则用户收不到"
+  },
+  "inject_last_voice_note": {
+    "description": "注入“上一条回复是语音”状态",
+    "type": "bool",
+    "default": true,
+    "hint": "让角色在下一轮知道自己刚才用语音说了话；只注入系统提示词，不写历史"
+  },
+  "last_voice_note_window_min": {
+    "description": "状态说明有效期（分钟）",
+    "type": "int",
+    "default": 30,
+    "hint": "超过这个时间就不再提“上一条是语音”"
+  },
+  "last_voice_note": {
+    "description": "状态说明文本",
+    "type": "text",
+    "default": "补充：你上一条回复是语音发出的（{ago}），用户听到的是你的声音；你能看到的对话记录里只有文字。相关时可以自然提及，不必刻意复述。",
+    "hint": "可用占位符：{ago}（刚刚/几分钟前）、{chars}（字数）"
+  },
+  "design_model": {
+    "description": "音色设计模型",
+    "type": "string",
+    "default": "mimo-v2.5-tts-voicedesign"
+  }
+}
